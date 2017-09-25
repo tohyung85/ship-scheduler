@@ -4,8 +4,11 @@ export function register(server, options, next) {
   server.route({
     method: 'GET',
     path: '/hello',
-    handler: (req, reply) => {
-      reply('Hello World!');
+    config: {
+      tags: ['api'],
+      handler: (req, reply) => {
+        reply('Hello World!');
+      }
     }
   });
 

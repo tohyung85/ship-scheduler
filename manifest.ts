@@ -24,6 +24,25 @@ const manifest = {
   registrations: [
     {
       plugin: './src/modules/hello'
+    },
+    {
+      plugin: 'inert'
+    },
+    {
+      plugin: 'vision'
+    },
+    {
+      plugin: {
+        register: 'hapi-swagger',
+        options: {
+          info: {
+            title: 'Hapi Starter',
+            version: '1.0'
+          }
+        }
+      }
+    }
+
       // TODO: DB config plugin
 
       // plugin: {
@@ -42,7 +61,6 @@ const manifest = {
       //     autoIndex: Config.get('/hapiMongoModels/autoIndex')
       //   }
       // }
-    },
   ]
 };
 

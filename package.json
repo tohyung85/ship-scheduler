@@ -27,6 +27,9 @@
     "dotenv": "^4.0.0",
     "glue": "^4.2.0",
     "hapi": "^16.6.0",
-    "typescript": "^2.5.2"
+    "hapi-swagger": "^7.8.1",
+    "inert": "^4.2.1",
+    "typescript": "^2.5.2",
+    "vision": "^4.1.1"
   }
 }
