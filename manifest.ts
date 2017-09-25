@@ -5,8 +5,6 @@ const criteria = {
   env: process.env.NODE_ENV
 };
 
-console.log('port', Config.get('/port/web'));
-
 const manifest = {
   $meta: 'This file defines the plot device.',
   server: {
