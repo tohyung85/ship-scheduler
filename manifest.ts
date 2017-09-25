@@ -1,5 +1,5 @@
-const Confidence = require('confidence');
-const Config = require('./config');
+import Confidence = require('confidence');
+import Config = require('./config');
 
 const criteria = {
   env: process.env.NODE_ENV
@@ -50,11 +50,11 @@ const manifest = {
 
 const store = new Confidence.Store(manifest);
 
-exports.get = (key) => {
+export function get(key: string) {
   return store.get(key, criteria);
 };
 
 
-exports.meta = (key) => {
+export function meta(key: string) {
   return store.meta(key, criteria);
 };

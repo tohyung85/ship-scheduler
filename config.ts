@@ -1,8 +1,7 @@
-const Confidence = require('confidence');
-const Dotenv = require('dotenv');
+import Confidence = require('confidence');
+import Dotenv = require('dotenv');
 
 Dotenv.config({silent: true});
-
 
 const criteria = {
   env: process.env.NODE_ENV
@@ -27,11 +26,11 @@ const config = {
 const store = new Confidence.Store(config);
 
 
-exports.get = (key) => {
+export function get(key: string) {
   return store.get(key, criteria);
 };
 
 
-exports.meta = (key) => {
+export function meta(key: string) {
   return store.meta(key, criteria);
 };
