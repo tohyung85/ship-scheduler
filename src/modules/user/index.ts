@@ -1,4 +1,3 @@
-import User from '../../models/user';
 const packageJson = require('./package.json');
 
 export function register(server, options, next) {

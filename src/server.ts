@@ -1,5 +1,5 @@
 require('babel-core/register');
-import Composer = require('./index');
+import Composer = require('../index');
 
 Composer((err, server) => {
 
