@@ -34,3 +34,16 @@ export function addUser(req, reply) {
       console.log('error fetching users', err);
     });
 }
+
+export function deleteUser(req, reply) {
+  const {id} = req.params;
+  User.query()
+    .delete()
+    .where('id', id)
+    .then(result => {
+      reply(result);
+    })
+    .catch(err => {
+      console.log('error deleting', err);
+    });
+}

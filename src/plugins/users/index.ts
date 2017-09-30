@@ -1,5 +1,5 @@
 const packageJson = require('./package.json');
-const Joi = require('joi');
+import * as Joi from 'joi';
 import User from './models/user';
 import * as UserController from './controllers/user-controller';
 
@@ -29,6 +29,19 @@ export function register(server, options, next) {
     }
   });
 
+  server.route({
+    method: 'DELETE',
+    path: '/users/{id}',
+    config: {
+      tags: ['api'],
+      handler: UserController.deleteUser,
+      validate: {
+        params: {
+          id: Joi.number()
+        }
+      }
+    }
+  });
   next();
 };
 
