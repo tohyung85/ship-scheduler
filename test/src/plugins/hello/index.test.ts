@@ -1,7 +1,7 @@
 'use strict';
 import Hapi = require('hapi');
 import Chai = require('chai');
-import HelloPlugin = require('../../../../src/modules/hello/index');
+import HelloPlugin = require('../../../../src/plugins/hello/index');
 import Lab = require('lab');
 import Config = require('../../../../config');
 

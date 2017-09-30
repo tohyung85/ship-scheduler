@@ -23,7 +23,10 @@ const manifest = {
   }],
   registrations: [
     {
-      plugin: './src/modules/hello'
+      plugin: './src/plugins/hello'
+    },
+    {
+      plugin: './src/plugins/users'
     },
     {
       plugin: 'inert'

@@ -4,7 +4,7 @@
   "description": "Starter kit for hapi backend",
   "main": "index.js",
   "scripts": {
-    "test": "lab --sourcemaps --transform node_modules/lab-transform-typescript -cv  -I __core-js_shared__ -t 100",
+    "test": "lab --sourcemaps --transform node_modules/lab-transform-typescript -v  -I __core-js_shared__",
     "start": "nodemon --exec ./node_modules/.bin/ts-node -- ./src/server.ts"
   },
   "author": "",
@@ -29,9 +29,12 @@
     "hapi": "^16.6.0",
     "hapi-swagger": "^7.8.1",
     "inert": "^4.2.1",
+    "joi": "^11.1.1",
     "knex": "^0.13.0",
     "mysql": "^2.14.1",
     "objection": "^0.8.9",
+    "objection-password": "^0.2.0",
+    "objection-visibility": "^0.2.0",
     "typescript": "^2.5.2",
     "vision": "^4.1.1"
   }
