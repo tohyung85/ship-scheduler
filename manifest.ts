@@ -29,9 +29,6 @@ const manifest = {
       plugin: './src/plugins/hello'
     },
     {
-      plugin: './src/plugins/users'
-    },
-    {
       plugin: 'inert'
     },
     {

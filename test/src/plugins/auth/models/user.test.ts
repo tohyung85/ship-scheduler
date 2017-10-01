@@ -1,6 +1,6 @@
 import Chai = require('chai');
 import Lab = require('lab');
-import User from '../../../../../src/plugins/users/models/user';
+import User from '../../../../../src/plugins/auth/models/user';
 
 const lab = exports.lab = Lab.script();
 
