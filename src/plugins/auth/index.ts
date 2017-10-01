@@ -3,10 +3,10 @@ const hapiJwt = require('hapi-auth-jwt2');
 import User from '../users/models/user';
 
 const validate = function(decoded, request, callback) {
-  const userEmail = decoded.email;
+  const id = decoded.id;
   User.query()
     .first()
-    .where('email', userEmail)
+    .where('id', id)
     .then(result => {
       if(result) 
         return callback(null, true);
