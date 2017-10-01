@@ -1,15 +1,11 @@
 import User from '../models/user';
 
 export function getAllUsers(req, reply) {
-  User
-    .query()
+  User.whiteList(User.query())
     .then(result => {
-      const whiteListResult = result.map(user => {
-        return user.toJSON();
-      });
       const returnResult = {
         count: result.length,
-        items: whiteListResult 
+        items: result
       }
       reply(returnResult);
     })
@@ -20,15 +16,15 @@ export function getAllUsers(req, reply) {
 
 export function addUser(req, reply) {
   const {name, username, password, email} = req.payload;
-  User.query()
+  User.whiteList(User.query()
     .insert({
       name,
       username,
       password,
       email
-    })
+    }))
     .then(result => {
-      reply(result.toJSON());
+      reply(result);
     })
     .catch(err => {
       console.log('error fetching users', err);
@@ -37,12 +33,12 @@ export function addUser(req, reply) {
 
 export function deleteUser(req, reply) {
   const {id} = req.params;
-  User.query()
+  User.whiteList(User.query()
     .delete()
     .where('id', id)
     .then(result => {
       reply(result);
-    })
+    }))
     .catch(err => {
       console.log('error deleting', err);
     });

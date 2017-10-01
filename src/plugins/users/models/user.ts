@@ -5,11 +5,13 @@ const Password = require('objection-password')({
   allowEmptyPassword: true,
   passwordField: 'password'
 });
-import visibilityPlugin = require('objection-visibility');
+import RestMixin from '../../../objection-rest-mixin';
+// import visibilityPlugin = require('objection-visibility');
 
 const mixins = compose(
   Password,
-  visibilityPlugin
+  RestMixin
+  // visibilityPlugin
 );
 
 export default class User extends mixins(Model) {
