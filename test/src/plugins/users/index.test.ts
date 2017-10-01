@@ -12,7 +12,8 @@ import AuthPlugin = require('../../../../src/plugins/auth/index');
 const lab = exports.lab = Lab.script();
 let request;
 let server;
-
+let token: string | null = null;
+let newUser: User | null = null;
 
 lab.beforeEach((done) => {
     const plugins = [AuthPlugin, UserPlugin];
@@ -31,12 +32,10 @@ lab.beforeEach((done) => {
 
 lab.experiment('User Plugin', () => {
 
-  let newUser: User | null = null;
-
-  lab.test('it should be able to add a user', done => {
+  lab.test('it should be able to add/register a user', done => {
     const request = {
       method: 'POST',
-      url: '/users',
+      url: '/auth/register',
       payload: {
         name: 'Test',
         username: 'testuser',
@@ -68,15 +67,44 @@ lab.experiment('User Plugin', () => {
     }
 
     server.inject(request, response => {
-      Chai.expect(response.result).to.match(/login is valid/);
+      Chai.expect(response.result).to.have.keys(['success', 'token']);
+      Chai.expect(response.result.success).to.equal(true);
+      Chai.expect(response.result.token).to.be.a('string');
+
+      token = response.result.token;
       done();
     })
   })
 
-  lab.test('it returns a list of users', (done) => {
+
+});
+
+lab.experiment('User logged in', () => {
+  let token = null;
+
+  lab.beforeEach(done => {
+    const request = {
+      method: 'POST',
+      url: '/auth/login',
+      payload: {
+        email: 'testadduser@user.com',
+        password: 'password'
+      }
+    }
+
+    server.inject(request, response => {
+      token = response.result.token;
+      done();
+    })
+  })
+
+  lab.test('User should be able to access list of users', done => {
     const request = {
         method: 'GET',
-        url: '/users'
+        url: '/users',
+        headers: {
+          Authorization: token 
+        }
     };
 
     server.inject(request, (response) => {
@@ -93,12 +121,30 @@ lab.experiment('User Plugin', () => {
 
       done();
     });
-  });
+  })
+
+  lab.test('User should be able to sign out', done => {
+    const request = {
+      method: 'POST',
+      url: '/auth/signout',
+      headers: {
+        Authorization: token 
+      }
+    }
+
+    server.inject(request, response => {
+      Chai.expect(response.result).to.have.keys(['success']);
+      done();
+    });
+  })
 
   lab.test('it should be able to delete a user', done => {
     const request = {
       method: 'DELETE',
       url: `/users/${newUser!.id}`,
+      headers: {
+        Authorization: token 
+      }
     };
 
     server.inject(request, response => {
@@ -106,5 +152,37 @@ lab.experiment('User Plugin', () => {
       done();
     });
   })
+})
 
-});
+lab.experiment('User is not logged in', () => {
+  lab.test('User should not be able to access list', done => {
+    const request = {
+      method: 'GET',
+      url: '/users',
+    };
+
+    server.inject(request, (response) => {
+      Chai.expect(response.statusCode).to.equal(401);
+
+      done();
+    });
+  })
+})
+
+lab.experiment('JWT is invalid', () => {
+  lab.test('User should not be able to access list', done => {
+    const request = {
+      method: 'GET',
+      url: '/users',
+      headers: {
+        Authorization:'crap token' 
+      }
+    };
+
+    server.inject(request, (response) => {
+      Chai.expect(response.statusCode).to.equal(401);
+
+      done();
+    });
+  })
+})

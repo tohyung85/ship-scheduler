@@ -1,4 +1,5 @@
 import User from '../models/user';
+import * as jwt from 'jsonwebtoken';
 
 export function getAllUsers(req, reply) {
   User.whiteList(User.query())
@@ -16,21 +17,38 @@ export function getAllUsers(req, reply) {
 
 export function login(req, reply) {
   const {email, password} = req.payload;
+  let id = null;
   User.query()
     .first()
     .where('email', email)
     .then(result => {
       if(result) {
+        id = result.id;
         return result.verifyPassword(password);
       }
-      reply('Login failed');
+      return reply({
+        success: false
+      });
     })
     .then(valid => {
       if(valid) {
-        return reply('login is valid');
+        const token = jwt.sign({
+          id,
+          email,
+        }, process.env.JWT_KEY, {
+            algorithm: 'HS256',
+            // expiresIn: '1h'
+        });
+
+        return reply({
+          success: true,
+          token
+        });
       } 
 
-      reply('Login failed');
+      reply({
+        success: false
+      });
     })
     .catch(err => {
       console.log('error logging in', err);
@@ -65,4 +83,19 @@ export function deleteUser(req, reply) {
     .catch(err => {
       console.log('error deleting', err);
     });
+}
+
+export function signout(req, reply) {
+  const id = req.auth.credentials.id;
+  User.query()
+  .first()
+  .where('id', id)
+  .then(result => {
+    reply({
+      success: true
+    })
+  })
+  .catch(err => {
+    console.log('error signing out', err);
+  });
 }

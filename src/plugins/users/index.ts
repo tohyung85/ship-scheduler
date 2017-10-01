@@ -13,7 +13,7 @@ const after = function(server, next) {
     path: '/users',
     config: {
       tags: ['api'],
-      auth: false,
+      auth: 'jwt',
       handler: UserController.getAllUsers
     }
   });
@@ -36,7 +36,17 @@ const after = function(server, next) {
 
   server.route({
     method: 'POST',
-    path: '/users',
+    path: '/auth/signout',
+    config: {
+      tags: ['api'],
+      handler: UserController.signout,
+      auth: 'jwt'
+    }
+  })
+
+  server.route({
+    method: 'POST',
+    path: '/auth/register',
     config: {
       auth: false,
       tags: ['api'],
@@ -52,7 +62,7 @@ const after = function(server, next) {
     path: '/users/{id}',
     config: {
       tags: ['api'],
-      auth: false,
+      auth: 'jwt',
       handler: UserController.deleteUser,
       validate: {
         params: {

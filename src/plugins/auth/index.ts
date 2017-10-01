@@ -1,22 +1,18 @@
 const packageJson = require('./package.json');
 const hapiJwt = require('hapi-auth-jwt2');
-// import * as Joi from 'joi';
-// import User from './models/user';
-// import * as UserController from './controllers/user-controller';
-var people = { // our "users database"
-  1: {
-    id: 1,
-    name: 'Jen Jones'
-  }
-};
+import User from '../users/models/user';
 
 const validate = function(decoded, request, callback) {
-  if (!people[decoded.id]) {
-    return callback(null, false);
-  }
-  else {
-    return callback(null, true);
-  }
+  const userEmail = decoded.email;
+  User.query()
+    .first()
+    .where('email', userEmail)
+    .then(result => {
+      if(result) 
+        return callback(null, true);
+
+      return callback(null, false);
+    })
 }
 
 export function register(server, options, next) {
