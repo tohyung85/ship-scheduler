@@ -23,6 +23,9 @@ const manifest = {
   }],
   registrations: [
     {
+      plugin: './src/plugins/auth'
+    },
+    {
       plugin: './src/plugins/hello'
     },
     {
@@ -41,7 +44,7 @@ const manifest = {
           info: {
             title: 'Hapi Starter',
             version: '1.0'
-          }
+          },
         }
       }
     }

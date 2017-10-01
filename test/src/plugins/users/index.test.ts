@@ -7,6 +7,7 @@ import Config = require('../../../../config');
 import User from '../../../../src/plugins/users/models/user';
 
 import UserPlugin = require('../../../../src/plugins/users/index');
+import AuthPlugin = require('../../../../src/plugins/auth/index');
 
 const lab = exports.lab = Lab.script();
 let request;
@@ -14,7 +15,7 @@ let server;
 
 
 lab.beforeEach((done) => {
-    const plugins = [UserPlugin];
+    const plugins = [AuthPlugin, UserPlugin];
     server = new Hapi.Server();
     server.connection({ port: Config.get('/port/web') });
     server.register(plugins, (err) => {
@@ -23,7 +24,7 @@ lab.beforeEach((done) => {
             return done(err);
         }
 
-        done();
+        server.initialize(done);
     });
 });
 
@@ -55,6 +56,22 @@ lab.experiment('User Plugin', () => {
       done();
     })
   });
+
+  lab.test('it should allow a user to login', done => {
+    const request = {
+      method: 'POST',
+      url: '/auth/login',
+      payload: {
+        email: 'testadduser@user.com',
+        password: 'password'
+      }
+    }
+
+    server.inject(request, response => {
+      Chai.expect(response.result).to.match(/login is valid/);
+      done();
+    })
+  })
 
   lab.test('it returns a list of users', (done) => {
     const request = {

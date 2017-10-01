@@ -6,12 +6,10 @@ const Password = require('objection-password')({
   passwordField: 'password'
 });
 import RestMixin from '../../../objection-rest-mixin';
-// import visibilityPlugin = require('objection-visibility');
 
 const mixins = compose(
   Password,
   RestMixin
-  // visibilityPlugin
 );
 
 export default class User extends mixins(Model) {

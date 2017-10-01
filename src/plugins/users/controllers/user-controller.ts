@@ -14,6 +14,29 @@ export function getAllUsers(req, reply) {
     });
 }
 
+export function login(req, reply) {
+  const {email, password} = req.payload;
+  User.query()
+    .first()
+    .where('email', email)
+    .then(result => {
+      if(result) {
+        return result.verifyPassword(password);
+      }
+      reply('Login failed');
+    })
+    .then(valid => {
+      if(valid) {
+        return reply('login is valid');
+      } 
+
+      reply('Login failed');
+    })
+    .catch(err => {
+      console.log('error logging in', err);
+    });
+}
+
 export function addUser(req, reply) {
   const {name, username, password, email} = req.payload;
   User.whiteList(User.query()
