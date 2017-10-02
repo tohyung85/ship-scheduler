@@ -75,6 +75,30 @@ lab.experiment('User Plugin', () => {
     })
   })
 
+  lab.test('it should not allow user with invalid credentials to log in', done => {
+    const request = {
+      method: 'POST',
+      url: '/auth/login',
+      payload: {
+        email: 'testadduser@user.com',
+        password: 'lamepassword'
+      }
+    }
+
+    server.inject(request, response => {
+      Chai.expect(response.statusCode).to.equal(401);
+      Chai.expect(response.result).to.have.keys(['statusCode', 'error', 'message']);
+
+      const {statusCode, error, message} = response.result;
+      Chai.expect(error).to.equal('Unauthorized');
+      Chai.expect(message).to.match(/Email or password is incorrect/);
+
+      token = response.result.token;
+      done();
+    })
+
+  })
+
 
 });
 

@@ -1,5 +1,6 @@
 import User from '../models/user';
 import * as jwt from 'jsonwebtoken';
+import * as Boom from 'boom';
 
 export function getAllUsers(req, reply) {
   User.whiteList(User.query())
@@ -11,7 +12,7 @@ export function getAllUsers(req, reply) {
       reply(returnResult);
     })
     .catch(err => {
-      console.log('error fetching users', err);
+      reply(Boom.serverUnavailable('Unable to fetch users'));
     });
 }
 
@@ -26,9 +27,7 @@ export function login(req, reply) {
         id = result.id;
         return result.verifyPassword(password);
       }
-      return reply({
-        success: false
-      });
+      reply(Boom.unauthorized('Email or password is incorrect'));
     })
     .then(valid => {
       if(valid) {
@@ -45,13 +44,10 @@ export function login(req, reply) {
           token
         });
       } 
-
-      reply({
-        success: false
-      });
+      reply(Boom.unauthorized('Email or password is incorrect'));
     })
     .catch(err => {
-      console.log('error logging in', err);
+      reply(Boom.serverUnavailable('Login error'));
     });
 }
 
@@ -68,7 +64,7 @@ export function addUser(req, reply) {
       reply(result);
     })
     .catch(err => {
-      console.log('error fetching users', err);
+      reply(Boom.serverUnavailable('Error registering user'));
     });
 }
 
@@ -81,7 +77,7 @@ export function deleteUser(req, reply) {
       reply(result);
     }))
     .catch(err => {
-      console.log('error deleting', err);
+      reply(Boom.serverUnavailable('Error deleting user'));
     });
 }
 
@@ -96,6 +92,6 @@ export function signout(req, reply) {
     })
   })
   .catch(err => {
-    console.log('error signing out', err);
+    reply(Boom.serverUnavailable('Error during user signout'));
   });
 }
