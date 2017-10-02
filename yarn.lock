@@ -622,7 +622,7 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
-bcrypt@^1.0.2:
+bcrypt@^1.0.2, bcrypt@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/bcrypt/-/bcrypt-1.0.3.tgz#b02ddc6c0b52ea16b8d3cf375d5a32e780dab548"
   dependencies:
@@ -2601,7 +2601,7 @@ mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1:
   dependencies:
     minimist "0.0.8"
 
-moment@2.x.x:
+moment@2.x.x, moment@^2.18.1:
   version "2.18.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.18.1.tgz#c36193dd3ce1c2eed2adb7c802dbbc77a81b1c0f"
 
@@ -2750,6 +2750,12 @@ object.omit@^2.0.0:
   dependencies:
     for-own "^0.1.4"
     is-extendable "^0.1.1"
+
+objection-guid@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/objection-guid/-/objection-guid-2.1.0.tgz#e1dfcbc53e5d8b7f016708b2783a840c4cea37d5"
+  dependencies:
+    uuid "^3.1.0"
 
 objection-password@^0.2.0:
   version "0.2.0"
