@@ -1,7 +1,9 @@
 import User from '../models/user';
+import Session from '../models/session';
 import * as jwt from 'jsonwebtoken';
 import * as Boom from 'boom';
 import * as moment from 'moment';
+
 
 export function getAllUsers(req, reply) {
   User.whiteList(User.query())
@@ -23,27 +25,40 @@ export function login(req, reply) {
   User.query()
     .first()
     .where('email', email)
-    .then(result => {
+    .then(result => { // Does user exist?
       if(!result) throw Boom.unauthorized('Email or password is incorrect');
 
       id = result.id;
       return result.verifyPassword(password);
     })
-    .then(valid => {
+    .then(valid => { // Is Password valid?
       if(!valid) throw Boom.unauthorized('Email or password is incorrect');
 
-      const token = jwt.sign({
-        id,
-        email,
-      }, process.env.JWT_KEY, {
-          algorithm: 'HS256',
-          // expiresIn: '1h'
-      });
+      return Session.query()
+        .first()
+        .where('userId', id);
+    })
+    .then(result => { // Is there already a session?
+      if(result) return Promise.resolve(result); 
+      return Session.query()
+        .insert({
+          userId: id,
+          expiry: moment().add(1, 'd').format('X')
+        });
+    })
+    .then(result => { // Successfully created a session?
+        const token = jwt.sign({
+          id,
+          email,
+        }, process.env.JWT_KEY, {
+            algorithm: 'HS256',
+            // expiresIn: '1h'
+        });
 
-      reply({
-        success: true,
-        token
-      });
+        reply({
+          success: true,
+          token
+        });
     })
     .catch(err => {
       reply(Boom.wrap(err));
@@ -86,11 +101,19 @@ export function signout(req, reply) {
   .first()
   .where('id', id)
   .then(result => {
+    return Session.query()
+      .delete()
+      .where('userId', id)
+  })
+  .then(result => {
+    if(!result) throw Boom.notFound('User is not signed in');
+
     reply({
       success: true
     })
+
   })
   .catch(err => {
-    reply(Boom.serverUnavailable('Error during user signout'));
+    reply(Boom.wrap(err));
   });
 }

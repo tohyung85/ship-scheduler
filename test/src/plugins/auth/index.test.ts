@@ -5,6 +5,7 @@ import Lab = require('lab');
 import Config = require('../../../../config');
 
 import User from '../../../../src/plugins/auth/models/user';
+import Session from '../../../../src/plugins/auth/models/session';
 
 import AuthPlugin = require('../../../../src/plugins/auth/index');
 
@@ -98,14 +99,13 @@ lab.experiment('User Plugin', () => {
     })
 
   })
-
-
 });
+
 
 lab.experiment('User logged in', () => {
   let token = null;
 
-  lab.beforeEach(done => {
+  lab.before(done => {
     const request = {
       method: 'POST',
       url: '/auth/login',
@@ -119,6 +119,15 @@ lab.experiment('User logged in', () => {
       token = response.result.token;
       done();
     })
+  })
+
+  lab.test('There should be a session created', done => {
+    Session.query()
+      .then(result=> {
+        Chai.expect(result).to.have.lengthOf(1);
+
+        done();
+      });
   })
 
   lab.test('User should be able to access list of users', done => {
@@ -174,6 +183,21 @@ lab.experiment('User logged in', () => {
       Chai.expect(response.result).to.equal(1);
       done();
     });
+  })
+
+
+  lab.after(done => {
+    const request = {
+      method: 'POST',
+      url: '/auth/signout',
+      headers: {
+        Authorization: token,
+      }
+    }
+
+    server.inject(request, response => {
+      done();
+    })
   })
 })
 

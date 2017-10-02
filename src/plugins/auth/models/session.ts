@@ -1,11 +1,13 @@
 import * as Joi from 'joi';
 import Model from '../../../objection-model';
 const {compose} = require('objection');
+const ObjectionGuid = require('objection-guid')();
 import RestMixin from '../../../objection-rest-mixin';
-import ObjectionGuid from 'objection-guid';
+import TimestampMixin from '../../../objection-timestamp-mixin';
 
 const mixins = compose(
   RestMixin,
+  TimestampMixin,
   ObjectionGuid
 );
 
