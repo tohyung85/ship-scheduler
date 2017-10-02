@@ -10,6 +10,7 @@ exports.up = function (knex: Knex): Promise<any> {
     sessionsTable.integer('userId', 50).notNullable();
 
     sessionsTable.integer('created_at', 11).notNullable();
+    sessionsTable.integer('updated_at', 11).notNullable();
     sessionsTable.integer('expiry', 11).notNullable();
   }); 
     

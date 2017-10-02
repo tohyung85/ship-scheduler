@@ -13,6 +13,7 @@ exports.up = function (knex: Knex): Promise<any> {
       usersTable.string('password', 128).notNullable();
 
       usersTable.integer('created_at', 11).notNullable();
+      usersTable.integer('updated_at', 11).notNullable();
     }); 
 };
 

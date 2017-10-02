@@ -1,14 +1,17 @@
 import * as Joi from 'joi';
 import Model from '../../../objection-model';
+
 const {compose} = require('objection');
 const Password = require('objection-password')({
   allowEmptyPassword: true,
   passwordField: 'password'
 });
+import TimestampMixin from '../../../objection-timestamp-mixin';
 import RestMixin from '../../../objection-rest-mixin';
 
 const mixins = compose(
   Password,
+  TimestampMixin,
   RestMixin
 );
 

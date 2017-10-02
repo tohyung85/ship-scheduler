@@ -17,7 +17,8 @@ exports.seed = function (knex: Knex): Promise<any> {
           username: 'tantohyung',
           password: hash,
           email: 'tytan@gmail.com',
-          created_at: moment().format('X')
+          created_at: moment().format('X'),
+          updated_at: moment().format('X'),
         },
       ];
       // Store hash in your password DB.

@@ -1,6 +1,7 @@
 import User from '../models/user';
 import * as jwt from 'jsonwebtoken';
 import * as Boom from 'boom';
+import * as moment from 'moment';
 
 export function getAllUsers(req, reply) {
   User.whiteList(User.query())
@@ -23,31 +24,29 @@ export function login(req, reply) {
     .first()
     .where('email', email)
     .then(result => {
-      if(result) {
-        id = result.id;
-        return result.verifyPassword(password);
-      }
-      reply(Boom.unauthorized('Email or password is incorrect'));
+      if(!result) throw Boom.unauthorized('Email or password is incorrect');
+
+      id = result.id;
+      return result.verifyPassword(password);
     })
     .then(valid => {
-      if(valid) {
-        const token = jwt.sign({
-          id,
-          email,
-        }, process.env.JWT_KEY, {
-            algorithm: 'HS256',
-            // expiresIn: '1h'
-        });
+      if(!valid) throw Boom.unauthorized('Email or password is incorrect');
 
-        return reply({
-          success: true,
-          token
-        });
-      } 
-      reply(Boom.unauthorized('Email or password is incorrect'));
+      const token = jwt.sign({
+        id,
+        email,
+      }, process.env.JWT_KEY, {
+          algorithm: 'HS256',
+          // expiresIn: '1h'
+      });
+
+      reply({
+        success: true,
+        token
+      });
     })
     .catch(err => {
-      reply(Boom.serverUnavailable('Login error'));
+      reply(Boom.wrap(err));
     });
 }
 
@@ -58,7 +57,7 @@ export function addUser(req, reply) {
       name,
       username,
       password,
-      email
+      email,
     }))
     .then(result => {
       reply(result);
