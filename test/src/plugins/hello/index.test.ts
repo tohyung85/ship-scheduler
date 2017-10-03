@@ -1,6 +1,7 @@
 'use strict';
 import Hapi = require('hapi');
 import Chai = require('chai');
+import EmitterPlugin = require('../../../../src/plugins/event-emitter/index');
 import HelloPlugin = require('../../../../src/plugins/hello/index');
 import AuthPlugin = require('../../../../src/plugins/auth/index');
 import Lab = require('lab');
@@ -13,7 +14,7 @@ let server;
 
 
 lab.beforeEach((done) => {
-    const plugins = [AuthPlugin, HelloPlugin];
+    const plugins = [EmitterPlugin, AuthPlugin, HelloPlugin];
     server = new Hapi.Server();
     server.connection({ port: Config.get('/port/web') });
     server.register(plugins, (err) => {

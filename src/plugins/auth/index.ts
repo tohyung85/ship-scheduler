@@ -18,7 +18,7 @@ const validate = function(decoded, request, callback) {
     }) 
 } 
 
-export function register(server, options, next) {
+const after = function(server, next) {
   server.register(hapiJwt);
 
   server.auth.strategy('jwt', 'jwt',
@@ -99,6 +99,13 @@ export function register(server, options, next) {
       }
     }
   });
+
+  next();
+}
+
+export function register(server, options, next) {
+  server.dependency('event-emitter', after);
+
   next();
 };
 

@@ -21,44 +21,33 @@ export function getAllUsers(req, reply) {
 
 export function login(req, reply) {
   const {email, password} = req.payload;
-  let id = null;
+  let user: User | null = null;
   User.query()
     .first()
     .where('email', email)
     .then(result => { // Does user exist?
       if(!result) throw Boom.unauthorized('Email or password is incorrect');
 
-      id = result.id;
+      user = result;
       return result.verifyPassword(password);
     })
     .then(valid => { // Is Password valid?
       if(!valid) throw Boom.unauthorized('Email or password is incorrect');
 
-      return Session.query()
-        .first()
-        .where('userId', id);
-    })
-    .then(result => { // Is there already a session?
-      if(result) return Promise.resolve(result); 
-      return Session.query()
-        .insert({
-          userId: id,
-          expiry: moment().add(1, 'd').format('X')
-        });
-    })
-    .then(result => { // Successfully created a session?
-        const token = jwt.sign({
-          id,
-          email,
-        }, process.env.JWT_KEY, {
-            algorithm: 'HS256',
-            // expiresIn: '1h'
-        });
+      req.server.events.emit('userLogin', user);
 
-        reply({
-          success: true,
-          token
-        });
+      const token = jwt.sign({
+        id: user!.id,
+        email,
+      }, process.env.JWT_KEY, {
+          algorithm: 'HS256',
+          // expiresIn: '1h'
+      });
+
+      reply({
+        success: true,
+        token
+      });
     })
     .catch(err => {
       reply(Boom.wrap(err));
@@ -101,12 +90,7 @@ export function signout(req, reply) {
   .first()
   .where('id', id)
   .then(result => {
-    return Session.query()
-      .delete()
-      .where('userId', id)
-  })
-  .then(result => {
-    if(!result) throw Boom.notFound('User is not signed in');
+    req.server.events.emit('userSignout', result);
 
     reply({
       success: true

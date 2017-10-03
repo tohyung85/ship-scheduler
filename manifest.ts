@@ -23,6 +23,9 @@ const manifest = {
   }],
   registrations: [
     {
+      plugin: './src/plugins/event-emitter'
+    },
+    {
       plugin: './src/plugins/auth'
     },
     {
