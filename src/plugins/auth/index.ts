@@ -100,6 +100,16 @@ const after = function(server, next) {
     }
   });
 
+  server.route({
+    method: 'GET',
+    path: '/auth/me',
+    config: {
+      tags: ['api'],
+      auth: 'jwt',
+      handler: UserController.getCurrUser
+    }
+  });
+
   next();
 }
 

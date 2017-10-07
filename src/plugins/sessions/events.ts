@@ -18,7 +18,7 @@ export function registerEvents(events) {
       })
       .then(result => {
         events.emit('sessionCreated');
-        console.log('session created', result);
+        // console.log('session created', result);
       })
       .catch(err => {
         console.log('error creating session', err);

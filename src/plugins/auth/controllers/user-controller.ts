@@ -1,5 +1,4 @@
 import User from '../models/user';
-import Session from '../models/session';
 import * as jwt from 'jsonwebtoken';
 import * as Boom from 'boom';
 import * as moment from 'moment';
@@ -100,4 +99,18 @@ export function signout(req, reply) {
   .catch(err => {
     reply(Boom.wrap(err));
   });
+}
+
+export function getCurrUser(req, reply) {
+  const id = req.auth.credentials.id;
+  User.whiteList(User.query()
+  .first()
+  .where('id', id))
+  .then(result => {
+    if(!result) throw Boom.notFound('User does not exist');
+    reply(result);
+  })
+  .catch(err => {
+    reply(Boom.wrap(err));
+  })
 }

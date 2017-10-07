@@ -122,14 +122,22 @@ lab.experiment('User logged in', () => {
     })
   })
 
-  // lab.test('There should be a session created', done => {
-  //   Session.query()
-  //     .then(result=> {
-  //       Chai.expect(result).to.have.lengthOf(1);
+  lab.test('User should be able to get his details', done => {
+    const request = {
+      method: 'GET',
+      url: '/auth/me',
+      headers: {
+        Authorization: token
+      }
+    };
 
-  //       done();
-  //     });
-  // })
+    server.inject(request, response => {
+      const user = response.result;
+
+      Chai.expect(user.email).to.match(/testadduser@user.com/);
+      done();
+    })
+  })
 
   lab.test('User should be able to access list of users', done => {
     const request = {
