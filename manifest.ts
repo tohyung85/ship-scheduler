@@ -13,7 +13,8 @@ const manifest = {
     },
     connections: {
       routes: {
-        security: true
+        security: true,
+        cors: true, // Allow cors for all paths, disable if you wish
       }
     }
   },
