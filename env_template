@@ -1,0 +1,16 @@
+NODE_ENV = development
+
+DB_HOST_DEV = 0.0.0.0
+DB_NAME_DEV = myproject_dev 
+DB_USER_DEV = some_name 
+DB_PASSWORD_DEV = some_password 
+
+DB_HOST_TEST = 0.0.0.0
+DB_NAME_TEST = myproject_test 
+DB_USER_TEST = some_name
+DB_PASSWORD_TEST = some_password 
+
+API_URL = http://localhost:8080
+
+
+JWT_KEY = "NeverShareYourSecret"
