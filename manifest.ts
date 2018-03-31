@@ -30,7 +30,7 @@ const manifest = {
       plugin: './src/plugins/auth'
     },
     {
-      plugin: './src/plugins/hello'
+      plugin: './src/plugins/surveyor'
     },
     {
       plugin: 'inert'
