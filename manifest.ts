@@ -39,6 +39,9 @@ const manifest = {
       plugin: './src/plugins/location'
     },
     {
+      plugin: './src/plugins/counterparty'
+    },
+    {
       plugin: 'inert'
     },
     {
