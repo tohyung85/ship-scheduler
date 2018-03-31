@@ -33,6 +33,9 @@ const manifest = {
       plugin: './src/plugins/surveyor'
     },
     {
+      plugin: './src/plugins/vessel'
+    },
+    {
       plugin: 'inert'
     },
     {
