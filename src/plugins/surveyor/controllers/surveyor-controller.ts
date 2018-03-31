@@ -20,7 +20,6 @@ export function getSurveyors(req, reply) {
 
 export function addSurveyor(req, reply) {
   const { company_name, approved, alias } = req.payload;
-  console.log('test', company_name, approved, alias);
   Surveyor.query()
   .insert({
     company_name,

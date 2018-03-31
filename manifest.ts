@@ -36,6 +36,9 @@ const manifest = {
       plugin: './src/plugins/vessel'
     },
     {
+      plugin: './src/plugins/location'
+    },
+    {
       plugin: 'inert'
     },
     {
